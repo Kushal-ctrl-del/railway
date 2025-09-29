@@ -5,6 +5,7 @@ import { LiveTrainMap } from './components/TrainMovement/LiveTrainMap';
 import { AIRecommendations } from './components/Decisions/AIRecommendations';
 import { WhatIfPanel } from './components/Simulation/WhatIfPanel';
 import { PerformanceCharts } from './components/Analytics/PerformanceCharts';
+import { TrainMapVisual } from './components/Explanation/TrainMapVisual';
 import { 
   mockTrains, 
   mockTracks, 
@@ -18,6 +19,7 @@ function App() {
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>(mockRecommendations);
   const [kpis, setKPIs] = useState<KPIData>(mockKPIs);
   const [selectedTrain, setSelectedTrain] = useState<string>('');
+  const [showExplanation, setShowExplanation] = useState<boolean>(false);
 
   // Simulate real-time data updates
   useEffect(() => {
@@ -63,7 +65,22 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header with KPIs */}
-      <KPIHeader data={kpis} />
+      <div className="flex items-center justify-between bg-gray-900 border-b border-gray-700 px-6 py-2">
+        <KPIHeader data={kpis} />
+        <button
+          onClick={() => setShowExplanation(!showExplanation)}
+          className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/30 transition-colors"
+        >
+          {showExplanation ? 'Hide' : 'Show'} How It Works
+        </button>
+      </div>
+      
+      {/* Explanation Panel */}
+      {showExplanation && (
+        <div className="p-6 bg-gray-800 border-b border-gray-700">
+          <TrainMapVisual />
+        </div>
+      )}
       
       {/* Main Layout */}
       <div className="p-6 grid grid-cols-12 gap-6 h-[calc(100vh-120px)]">
